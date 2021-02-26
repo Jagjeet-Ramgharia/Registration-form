@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration form</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mulish:wght@200&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+      integrity="sha512-PgQMlq+nqFLV4ylk1gwUOgm6CtIIXkKwaIHp/PAIWHzig/lKZSEGKEysh0TCVbHJXCLN7WetD8TFecIky75ZfQ=="
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" type="text/css" href="reg.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header"><h2>REGISTRATION FORM</h2></div>
+      <form class="form" id="form">
+        <div class="form-control">
+          <label>Username</label>
+          <input type="text" name="" id="username" placeholder="Username" autocomplete="off"/>
+          <i class="fas fa-check-circle"></i>
+          <i class="fas fa-exclamation-circle"></i>
+          <small>Error message</small>
+        </div>
+        <div class="form-control">
+          <label>Email</label>
+          <input type="text" name="" id="email" placeholder="Email" autocomplete="off" />
+          <i class="fas fa-check-circle"></i>
+          <i class="fas fa-exclamation-circle"></i>
+          <small>Error message</small>
+        </div>
+        <div class="form-control">
+          <label>Phone Number</label>
+          <input type="number" name="" id="phone" placeholder="Phone Number" autocomplete="off" />
+          <i class="fas fa-check-circle"></i>
+          <i class="fas fa-exclamation-circle"></i>
+          <small>Error message</small>
+        </div>
+        <div class="form-control">
+          <label>Password</label>
+          <input type="password" name="" id="password" placeholder="Password" autocomplete="off"/>
+          <i class="fas fa-check-circle"></i>
+          <i class="fas fa-exclamation-circle"></i>
+          <small>Error message</small>
+        </div>
+        <div class="form-control">
+          <label>Confirm Password</label>
+          <input
+            type="password"
+            name=""
+            id="cpassword"
+            placeholder="Confirm Password" autocomplete="off"
+          />
+          <i class="fas fa-check-circle"></i>
+          <i class="fas fa-exclamation-circle"></i>
+          <small>Error message</small>
+        </div>
+        <input type="submit" value="submit" class="btn" name="" />
+      </form>
+    </div>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript">
+    const form = document.getElementById('form');
+    const username = document.getElementById('username');
+    const email= document.getElementById('email');
+    const phone = document.getElementById('phone');
+    const password = document.getElementById('password');
+    const cpassword = document.getElementById('cpassword');
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        validate();
+    })  
+
+    const sendData = (usernameval, count ,sRate) =>{
+      if(count === sRate){
+        swal("Welcome! " +usernameval, "Registration Successfull", "success");
+      }
+    }
+
+    const successMsg = (usernameval) =>{
+      let formCon = document.getElementsByClassName('form-control');
+      var count = formCon.length -1;
+      for(var i=0; i<formCon.length; i++){
+        if(formCon[i].className === "form-control success"){
+          var sRate = 0 + i;
+          sendData(usernameval,count , sRate);
+        }else{
+          return false;
+        }
+      
+      }
+    }
+
+    const isEmail = (emailval) =>{
+      var atSymbol = emailval.indexOf("@");
+      if(atSymbol < 1) return false;
+      var dot = emailval.indexOf(".");
+      if(dot <= atSymbol + 2) return false;
+      if(dot === emailval.length - 1)return false;
+      return true;
+    }
+
+    const validate = () =>{
+    const usernameval = username.value.trim();
+    const emailval = email.value.trim();
+    const phoneval = phone.value.trim();
+    const passwordval = password.value.trim();
+    const cpasswordval = cpassword.value.trim();
+
+      if(usernameval === ""){
+        setErrorMsg(username,"username cannot be empty");
+      }
+      else if(usernameval.length <= 2){
+        setErrorMsg(username,"username is to short");
+      }
+      else{
+        setSuccessMsg(username);
+      }
+
+      if(emailval === ""){
+        setErrorMsg(email,"Email cannot be empty");
+      }
+      else if(!isEmail(emailval)){
+        setErrorMsg(email,"Not a valid Email");
+      }
+      else{
+        setSuccessMsg(email);
+      }
+
+      if(phoneval === ""){
+        setErrorMsg(phone,"Contact cannot be empty");
+      }
+      else if(phoneval.length != 10){
+        setErrorMsg(phone,"Enter a valid number");
+      }
+      else{
+        setSuccessMsg(phone);
+      }
+
+      if(passwordval === ""){
+        setErrorMsg(password,"Password cannot be empty");
+      }
+      else if(passwordval.length <= 6){
+        setErrorMsg(password,"Password is to short");
+      }
+      else{
+        setSuccessMsg(password);
+      }
+
+      if(cpasswordval === ""){
+        setErrorMsg(cpassword,"confirm Password cannot be empty");
+      }
+      else if(passwordval != cpasswordval){
+        setErrorMsg(cpassword,"Invalid Password");
+      }
+      else{
+        setSuccessMsg(cpassword);
+      }
+
+      successMsg(usernameval);
+
+    }
+
+    function setErrorMsg(input, errormsgs){
+      const formControl = input.parentElement;
+      const small = formControl.querySelector('small');
+      formControl.className = "form-control error";
+      small.innerText = errormsgs;
+    }
+
+    function setSuccessMsg(input){
+      const formControl = input.parentElement;
+      formControl.className = "form-control success"
+    }
+    </script>
+  </body>
+</html>
